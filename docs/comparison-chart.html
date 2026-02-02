@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traditional XOOPS vs Vision 2026 - Comparison Chart</title>
+    <style>
+        :root {
+            --primary: #667EEA;
+            --secondary: #764BA2;
+            --accent: #4FACFE;
+            --success: #43E97B;
+            --danger: #F5576C;
+            --dark: #1E293B;
+            --light: #F8FAFC;
+            --muted: #64748B;
+            --code-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .panel-header {
+            padding: 1.5rem;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .panel-header.traditional {
+            background: linear-gradient(135deg, var(--danger) 0%, #ff8a80 100%);
+        }
+
+        .panel-header.vision2026 {
+            background: linear-gradient(135deg, var(--success) 0%, #00d9a6 100%);
+        }
+
+        .panel-content {
+            padding: 1.5rem;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #D4D4D4;
+        }
+
+        .code-block .comment { color: #6A9955; font-style: italic; }
+        .code-block .keyword { color: #569CD6; }
+        .code-block .class { color: #4EC9B0; }
+        .code-block .function { color: #DCDCAA; }
+        .code-block .string { color: #CE9178; }
+        .code-block .variable { color: #9CDCFE; }
+        .code-block .bad { color: #F14C4C; }
+        .code-block .good { color: #4EC9B0; }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-desc {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-list, .benefit-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .problem-list li, .benefit-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .problem-list li::before {
+            content: "✗";
+            position: absolute;
+            left: 0;
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        .benefit-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .quick-compare {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .quick-compare h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .compare-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .compare-table th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        .compare-table th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .compare-table .bad-cell {
+            color: var(--danger);
+        }
+
+        .compare-table .good-cell {
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .feature-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .cta-section h2 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .cta-section p {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+            border: 2px solid #E2E8F0;
+        }
+
+        footer {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Traditional XOOPS vs Vision 2026</h1>
+            <p>See how Clean Architecture transforms XOOPS module development</p>
+        </header>
+
+        <!-- Quick Comparison Table -->
+        <div class="quick-compare">
+            <h2>Quick Comparison</h2>
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Traditional XOOPS</th>
+                        <th>Vision 2026</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Validation</strong></td>
+                        <td class="bad-cell">Scattered throughout code</td>
+                        <td class="good-cell">Centralized in Value Objects</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database Access</strong></td>
+                        <td class="bad-cell">Anywhere ($xoopsDB->query)</td>
+                        <td class="good-cell">Only in Infrastructure layer</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Testing</strong></td>
+                        <td class="bad-cell">Requires XOOPS + database</td>
+                        <td class="good-cell">Domain tests run standalone</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Business Rules</strong></td>
+                        <td class="bad-cell">Mixed with UI/DB code</td>
+                        <td class="good-cell">Isolated in Domain Entities</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dependencies</strong></td>
+                        <td class="bad-cell">Everything depends on XOOPS</td>
+                        <td class="good-cell">Core code has zero dependencies</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reusability</strong></td>
+                        <td class="bad-cell">Locked to XOOPS</td>
+                        <td class="good-cell">Domain logic works anywhere</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Code Comparison: Creating an Article -->
+        <div class="comparison-grid">
+            <div class="panel">
+                <div class="panel-header traditional">
+                    <span>❌</span> Traditional Approach
+                </div>
+                <div class="panel-content">
+                    <div class="section-title">Creating an Article</div>
+                    <div class="section-desc">Everything mixed in one file</div>
+
+                    <div class="code-block">
+<pre><span class="comment">// submit.php - validation, DB, redirect all together</span>
+<span class="variable">$title</span> = <span class="variable">$_POST</span>[<span class="string">'title'</span>];
+
+<span class="comment">// Validation scattered here</span>
+<span class="keyword">if</span> (<span class="function">strlen</span>(<span class="variable">$title</span>) > 255) {
+    <span class="variable">$error</span> = <span class="string">'Title too long'</span>;
+    <span class="function">redirect_header</span>(<span class="string">'add.php'</span>, 2, <span class="variable">$error</span>);
+}
+
+<span class="comment">// Database code right here</span>
+<span class="keyword">global</span> <span class="variable">$xoopsDB</span>;
+<span class="variable">$sql</span> = <span class="string">"INSERT INTO..."</span>;
+<span class="variable">$xoopsDB</span>-><span class="function">queryF</span>(<span class="variable">$sql</span>);
+
+<span class="bad">// Hard to test without XOOPS running!</span></pre>
+                    </div>
+
+                    <ul class="problem-list">
+                        <li>Validation mixed with database code</li>
+                        <li>Same validation duplicated in 5+ places</li>
+                        <li>Can't test without full XOOPS bootstrap</li>
+                        <li>Easy to forget validation somewhere</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header vision2026">
+                    <span>✅</span> Vision 2026 Approach
+                </div>
+                <div class="panel-content">
+                    <div class="section-title">Creating an Article</div>
+                    <div class="section-desc">Clean separation of concerns</div>
+
+                    <div class="code-block">
+<pre><span class="comment">// Controller: thin, delegates to handler</span>
+<span class="variable">$command</span> = <span class="keyword">new</span> <span class="class">CreateArticle</span>(
+    <span class="class">ArticleTitle</span>::<span class="function">fromString</span>(<span class="variable">$_POST</span>[<span class="string">'title'</span>]),
+    <span class="class">ArticleContent</span>::<span class="function">fromString</span>(<span class="variable">$_POST</span>[<span class="string">'content'</span>]),
+    <span class="class">AuthorId</span>::<span class="function">fromInt</span>(<span class="variable">$uid</span>)
+);
+
+<span class="comment">// Handler does the work</span>
+<span class="variable">$article</span> = <span class="variable">$handler</span>-><span class="function">handle</span>(<span class="variable">$command</span>);
+
+<span class="good">// Validation happens in Value Objects - once!</span></pre>
+                    </div>
+
+                    <ul class="benefit-list">
+                        <li>Value Objects validate at creation</li>
+                        <li>Handler is easily unit tested</li>
+                        <li>No database code in controller</li>
+                        <li>Type safety prevents wrong values</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Comparison: Validation -->
+        <div class="comparison-grid">
+            <div class="panel">
+                <div class="panel-header traditional">
+                    <span>❌</span> Validation Scattered
+                </div>
+                <div class="panel-content">
+                    <div class="code-block">
+<pre><span class="comment">// In submit.php:</span>
+<span class="keyword">if</span> (<span class="function">strlen</span>(<span class="variable">$title</span>) > 255) { ... }
+
+<span class="comment">// In edit.php (different check!):</span>
+<span class="keyword">if</span> (!<span class="variable">$title</span>) { ... }
+
+<span class="comment">// In api.php:</span>
+<span class="bad">// Forgot validation entirely!</span>
+
+<span class="comment">// In import.php:</span>
+<span class="keyword">if</span> (<span class="function">empty</span>(<span class="variable">$title</span>)) { ... }</pre>
+                    </div>
+                    <p style="color: var(--muted); font-size: 0.9rem;">
+                        Different validation in different places. Bugs waiting to happen.
+                    </p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header vision2026">
+                    <span>✅</span> Validation Centralized
+                </div>
+                <div class="panel-content">
+                    <div class="code-block">
+<pre><span class="comment">// ArticleTitle.php - ONE place for all rules</span>
+<span class="keyword">final readonly class</span> <span class="class">ArticleTitle</span>
+{
+    <span class="keyword">public static function</span> <span class="function">fromString</span>(<span class="variable">$value</span>): <span class="class">self</span>
+    {
+        <span class="keyword">if</span> (<span class="variable">$value</span> === <span class="string">''</span>) {
+            <span class="keyword">throw new</span> <span class="class">InvalidArgumentException</span>(...);
+        }
+        <span class="keyword">if</span> (<span class="function">strlen</span>(<span class="variable">$value</span>) > 255) {
+            <span class="keyword">throw new</span> <span class="class">InvalidArgumentException</span>(...);
+        }
+        <span class="keyword">return new</span> <span class="class">self</span>(<span class="variable">$value</span>);
+    }
+}</pre>
+                    </div>
+                    <p style="color: var(--muted); font-size: 0.9rem;">
+                        One class, one place, always valid after creation.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Cards -->
+        <div class="feature-cards">
+            <div class="feature-card">
+                <h3>🧪 Testing</h3>
+                <p>Domain layer tests run in <strong>milliseconds</strong> with zero external dependencies. No database, no XOOPS bootstrap, no flaky tests.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📦 Value Objects</h3>
+                <p>Self-validating data types like ArticleTitle, ArticleSlug, AuthorId. <strong>Impossible</strong> to have invalid data after creation.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 Domain Events</h3>
+                <p>Record what happened (ArticlePublished, CommentAdded) for <strong>loose coupling</strong>. Notifications, indexing, analytics - all decoupled.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔄 Repository Pattern</h3>
+                <p>Interface in Domain, implementation in Infrastructure. <strong>Swap databases</strong> without changing business logic.</p>
+            </div>
+        </div>
+
+        <!-- Testing Comparison -->
+        <div class="comparison-grid">
+            <div class="panel">
+                <div class="panel-header traditional">
+                    <span>❌</span> Testing is Hard
+                </div>
+                <div class="panel-content">
+                    <div class="code-block">
+<pre><span class="comment">// To test traditional XOOPS module:</span>
+<span class="comment">// 1. Boot XOOPS</span>
+<span class="comment">// 2. Connect to test database</span>
+<span class="comment">// 3. Seed test data</span>
+<span class="comment">// 4. Hope nothing interferes</span>
+<span class="comment">// 5. Clean up after</span>
+
+<span class="bad">// Often: just manual testing in browser</span>
+<span class="bad">// Tests take seconds/minutes</span>
+<span class="bad">// Tests are flaky</span></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header vision2026">
+                    <span>✅</span> Testing is Easy
+                </div>
+                <div class="panel-content">
+                    <div class="code-block">
+<pre><span class="keyword">public function</span> <span class="function">test_article_creation</span>(): <span class="class">void</span>
+{
+    <span class="comment">// No database! No XOOPS!</span>
+    <span class="variable">$article</span> = <span class="class">Article</span>::<span class="function">create</span>(
+        <span class="class">ArticleTitle</span>::<span class="function">fromString</span>(<span class="string">'Test'</span>),
+        <span class="class">ArticleContent</span>::<span class="function">fromString</span>(<span class="string">'Content'</span>),
+        <span class="class">AuthorId</span>::<span class="function">fromInt</span>(1)
+    );
+
+    <span class="variable">$this</span>-><span class="function">assertTrue</span>(<span class="variable">$article</span>-><span class="function">isDraft</span>());
+}
+<span class="good">// Runs in 23ms!</span></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <h2>Ready to Try Vision 2026?</h2>
+            <p>Download the module and experience Clean Architecture in XOOPS firsthand.</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/xoops/vision2026" class="btn btn-primary">
+                    ⭐ View on GitHub
+                </a>
+                <a href="WALKTHROUGH.md" class="btn btn-secondary">
+                    📖 Read the Walkthrough
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            <p>Vision 2026 - Modern Architecture for XOOPS CMS</p>
+            <p><a href="https://xoops.org">xoops.org</a> • Part of the XOOPS 2026 Initiative</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,506 @@
+/**
+ * Vision 2026 Module - Main Stylesheet
+ *
+ * This stylesheet provides styling for the Vision 2026 reference implementation.
+ * Organized by component for easy maintenance.
+ */
+
+/* ============================================================================
+   INDEX PAGE - Article Listing
+   ========================================================================= */
+
+.vision2026-index {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.module-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #667eea;
+}
+
+.module-header h1 {
+    color: #667eea;
+    margin: 0;
+}
+
+.module-header p {
+    color: #666;
+    margin: 0.5rem 0 0;
+}
+
+/* Demo Banner */
+.demo-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.demo-banner a {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.demo-banner a:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Empty State */
+.no-articles {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+}
+
+.no-articles h2 {
+    color: #495057;
+    margin: 0 0 1rem 0;
+}
+
+.no-articles p {
+    color: #6c757d;
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+}
+
+.no-articles .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.no-articles .btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.no-articles .btn-primary {
+    background: #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.no-articles .btn-demo {
+    background: #764ba2;
+    box-shadow: 0 2px 8px rgba(118, 75, 162, 0.3);
+}
+
+.no-articles .info-box {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.no-articles .info-box h3 {
+    color: #667eea;
+    margin-top: 0;
+}
+
+.no-articles .info-box p {
+    color: #495057;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Article Cards */
+.article-list {
+    display: grid;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.article-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.article-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.article-card h2 {
+    margin-top: 0;
+}
+
+.article-card h2 a {
+    color: #333;
+    text-decoration: none;
+}
+
+.article-card h2 a:hover {
+    color: #667eea;
+}
+
+.article-card .meta {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.article-card .meta span {
+    margin-right: 1rem;
+}
+
+.article-card p {
+    margin-bottom: 0.75rem;
+}
+
+.article-card .read-more {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.article-card .read-more:hover {
+    text-decoration: underline;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.pagination a,
+.pagination span {
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+}
+
+.pagination a:hover {
+    background: #e9ecef;
+}
+
+/* ============================================================================
+   ARTICLE PAGE - Single Article Display
+   ========================================================================= */
+
+.vision2026-article {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.article-full {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.article-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.article-header h1 {
+    font-size: 2.5rem;
+    margin: 0 0 1rem;
+    color: #333;
+    line-height: 1.2;
+}
+
+.article-header .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.article-content {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.article-content h2 {
+    margin-top: 2rem;
+    color: #333;
+}
+
+.article-content p {
+    margin-bottom: 1.5rem;
+}
+
+.article-content ul,
+.article-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+/* Code Styling */
+.article-content code,
+.architecture-note code {
+    background: #2d2d2d !important;
+    color: #f8f8f2 !important;
+    padding: 0.2rem 0.4rem !important;
+    border-radius: 3px !important;
+    font-size: 0.9em !important;
+    font-family: 'Courier New', Consolas, Monaco, monospace !important;
+}
+
+.architecture-note code {
+    font-size: 0.85em !important;
+}
+
+.article-content pre {
+    background: #2d2d2d !important;
+    color: #f8f8f2 !important;
+    padding: 1rem !important;
+    border-radius: 8px !important;
+    overflow-x: auto !important;
+    margin-bottom: 1rem !important;
+    border: 1px solid #444 !important;
+}
+
+.article-content pre code {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+.article-content blockquote {
+    border-left: 4px solid #667eea;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    color: #495057;
+    font-style: italic;
+}
+
+.article-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.share-buttons {
+    margin-bottom: 1.5rem;
+}
+
+.share-buttons span {
+    color: #666;
+    margin-right: 1rem;
+}
+
+.share-buttons a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-right: 0.5rem;
+}
+
+.share-buttons .share-twitter {
+    background: #1da1f2;
+}
+
+.share-buttons .share-facebook {
+    background: #4267b2;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navigation a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.navigation a:hover {
+    text-decoration: underline;
+}
+
+/* Architecture Note */
+.architecture-note {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+}
+
+.architecture-note h4,
+.architecture-note h3 {
+    margin-top: 0;
+    color: #667eea;
+}
+
+.architecture-note ol {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: #666;
+}
+
+.architecture-note p {
+    margin-bottom: 0.5rem;
+}
+
+.architecture-note a {
+    color: #667eea;
+    text-decoration: underline;
+}
+
+/* Error Messages */
+.error-message {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.error-message h2 {
+    margin-top: 0;
+}
+
+.error-message a {
+    color: #721c24;
+}
+
+/* Setup Notice */
+.setup-notice {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.setup-notice h3 {
+    margin-top: 0;
+    color: #856404;
+}
+
+/* Article Preview (for setup page) */
+.article-preview {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.article-preview h3 {
+    margin-top: 0;
+}
+
+.article-preview h3 a {
+    color: #333;
+    text-decoration: none;
+}
+
+.article-preview .meta {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.article-preview p {
+    margin-bottom: 0.75rem;
+}
+
+.article-preview .read-more {
+    color: #667eea;
+}
+
+/* ============================================================================
+   ADMIN - Status Badges
+   ========================================================================= */
+
+.status-draft {
+    background: #ffc107;
+    color: #212529;
+}
+
+.status-published {
+    background: #28a745;
+    color: white;
+}
+
+.status-archived {
+    background: #6c757d;
+    color: white;
+}
+
+/* ============================================================================
+   UTILITIES
+   ========================================================================= */
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5568d3;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+.alert-info {
+    background: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+}
