@@ -1,6 +1,4 @@
-# CLAUDE.md - Vision 2026 Implementation Guide
-
-> **This file provides context for AI assistants working on the Vision 2026 module.**
+# Vision 2026 Module for XOOPS CMS
 
 ## Project Overview
 
@@ -361,9 +359,6 @@ $article = $handler->handle($command);
 
 - [WALKTHROUGH.md](docs/WALKTHROUGH.md) — Step-by-step request flow
 - [COMPARISON.md](docs/COMPARISON.md) — Traditional vs Vision 2026
-- [README.md](README.md) — Module documentation
 - [Knowledge Base](../XOOPS-Knowledge-Base/10-Vision2026-Module/) — Full documentation
 
 ---
-
-*This guide helps AI assistants understand and work with the Vision 2026 codebase effectively.*
