@@ -1,163 +1,369 @@
-# Future Test Suite - Vision 2026
+# CLAUDE.md - Vision 2026 Implementation Guide
 
-> **Blueprint tests representing the ideal implementation based on Cowork's specification**
+> **This file provides context for AI assistants working on the Vision 2026 module.**
 
-## Purpose
+## Project Overview
 
-This directory contains comprehensive tests based on the original Vision 2026 specification document (`Testing.md` from Cowork). These tests represent the **target architecture** and serve as:
+Vision 2026 is a reference implementation demonstrating Clean Architecture and Domain-Driven Design patterns for XOOPS CMS. It serves as the blueprint for modern XOOPS module development.
 
-1. **Implementation Blueprint** - Shows how features should work when fully implemented
-2. **Documentation** - Demonstrates best practices and expected behavior
-3. **Roadmap** - Guides future development toward the specification
-4. **Educational Resource** - Teaches Clean Architecture testing patterns
+### Goals
 
-## Status: 📋 Specification-Based (Not Yet Passing)
-
-These tests are written against the **ideal future state** described in the original specification. They currently fail because:
-
-- Some interfaces/methods don't exist yet (`ArticleStatus::fromString()`)
-- Error messages differ from specification
-- Method signatures are simplified in current implementation
-- Some features are planned but not yet implemented
-
-## Test Files (9 files, 2,596 lines)
-
-### Domain Layer Tests
-```
-tests_future/Unit/Domain/
-├── Entity/
-│   ├── ArticleTest.php               ✅ PASSES (Current implementation)
-│   └── ArticleStatusTest.php         📋 Future (missing fromString method)
-└── ValueObject/
-    ├── ArticleIdTest.php             ✅ PASSES (Current implementation)
-    ├── ArticleTitleTest.php          ✅ PASSES (Current implementation)
-    ├── ArticleContentTest.php        📋 Future (different error messages)
-    └── ArticleSlugTest.php           📋 Future (simplified validation)
-```
-
-### Application Layer Tests
-```
-tests_future/Unit/Application/
-└── Command/
-    ├── CreateArticleHandlerTest.php  📋 Future (different signatures)
-    └── PublishArticleHandlerTest.php 📋 Future (different return types)
-```
-
-### Infrastructure Layer Tests
-```
-tests_future/Unit/Infrastructure/
-└── Persistence/
-    └── ArticleMapperTest.php         📋 Future (needs implementation updates)
-```
-
-## Current Working Tests
-
-The **3 original tests** that work with current implementation are in `/tests/Unit/`:
-
-✅ `ArticleTest.php` - Core entity business logic
-✅ `ArticleIdTest.php` - ULID identifier validation
-✅ `ArticleTitleTest.php` - Title validation rules
-
-These tests pass **all assertions** and provide solid coverage of critical domain logic.
-
-## Implementation Differences
-
-### 1. Event Dispatcher Path
-**Specification**: `Vision2026\Application\EventDispatcher\EventDispatcherInterface`
-**Current**: `Vision2026\Application\Event\EventDispatcherInterface`
-
-### 2. Event Dispatching
-**Specification**: Dispatch array of events
-**Current**: Dispatch events one at a time in a loop
-
-### 3. Handler Return Types
-**Specification**: Returns `Article` entity
-**Current**: Returns `ArticleId` value object
-
-### 4. Error Messages
-**Specification**: Detailed messages like "Article content cannot be empty"
-**Current**: Generic messages like "Content must be at least 50 characters, got 0"
-
-### 5. Validation Methods
-**Specification**: `ArticleStatus::fromString()` for string conversion
-**Current**: Not yet implemented
-
-### 6. Slug Validation
-**Specification**: Strict validation with detailed error messages
-**Current**: Simple regex validation with generic error message
-
-## Migration Path
-
-To make these tests pass, you would need to:
-
-### Phase 1: Align Error Messages
-- Update `ArticleContent` validation messages
-- Update `ArticleSlug` validation messages
-- Add specific error messages for each validation rule
-
-### Phase 2: Add Missing Methods
-- Implement `ArticleStatus::fromString()`
-- Implement `ArticleStatus::toString()`
-- Add excerpt generation to `ArticleContent`
-- Add reading time calculation to `ArticleContent`
-- Add word count to `ArticleContent`
-
-### Phase 3: Enhance Validation
-- Add stricter slug validation (consecutive hyphens, start/end checks)
-- Add length validation to all value objects
-- Add specific error types for different validation failures
-
-### Phase 4: Refine Handlers
-- Consider changing return types if beneficial
-- Align event dispatching patterns
-- Add comprehensive error handling
-
-## Usage
-
-### Run Future Tests (will fail)
-```bash
-/Applications/MAMP/bin/php/php8.3.28/bin/php vendor/bin/phpunit tests_future/
-```
-
-### Use as Reference
-When implementing new features, refer to these tests to understand:
-- Expected method signatures
-- Validation rules and error messages
-- Business logic behavior
-- Testing best practices
-
-## Value of These Tests
-
-Even though they don't pass yet, these tests are **extremely valuable** because:
-
-1. **Clear Specification** - Shows exactly what behavior is expected
-2. **Quality Bar** - Demonstrates high standards for error messages and validation
-3. **Educational** - Teaches proper testing techniques (data providers, edge cases, etc.)
-4. **Future-Proof** - When implementing features, you have clear acceptance criteria
-
-## Test Statistics
-
-| Metric | Count |
-|--------|-------|
-| Total Test Files | 9 |
-| Total Lines | 2,596 |
-| Test Methods | 150+ |
-| Data Providers | 8 |
-| Edge Cases Covered | 80+ |
-
-## Recommendation
-
-**Keep these tests** as part of the repository. They serve as:
-- ✅ Documentation of ideal implementation
-- ✅ Roadmap for future enhancements
-- ✅ Educational resource for developers
-- ✅ Quality standards reference
-
-When you implement new features or refactor existing ones, gradually move passing tests from `tests_future/` to `tests/`.
+1. Demonstrate Clean Architecture in a real XOOPS module
+2. Show how to build testable code without XOOPS dependencies
+3. Provide patterns that can be adopted by other modules
+4. Bridge the gap between XOOPS 2.5.x and XOOPS 2026
 
 ---
 
-**Status**: Blueprint / Specification
-**Created**: 2026-02-02
-**Based On**: Cowork's Vision 2026 Testing.md specification
-**Current Passing Tests**: 3/9 files (in /tests/ directory)
+## Architecture
+
+### Layer Overview
+
+```mermaid
+flowchart TB
+    subgraph PRES["🎨 PRESENTATION LAYER"]
+        direction LR
+        CTRL["Controllers<br/>index.php, article.php"]
+        TPL["Templates<br/>Smarty .tpl files"]
+        API["REST API<br/>api/*.php"]
+    end
+
+    subgraph APP["⚙️ APPLICATION LAYER"]
+        direction LR
+        CMD["Commands<br/>CreateArticle, PublishArticle"]
+        HANDLER["Handlers<br/>CreateArticleHandler"]
+        EVENTS["Event Dispatcher"]
+    end
+
+    subgraph DOM["💎 DOMAIN LAYER"]
+        direction LR
+        ENT["Entities<br/>Article, Comment"]
+        VO["Value Objects<br/>ArticleId, Title, Slug"]
+        REPO_INT["Repository<br/>Interfaces"]
+        DOM_EVT["Domain Events<br/>ArticleCreated"]
+    end
+
+    subgraph INFRA["🔧 INFRASTRUCTURE LAYER"]
+        direction LR
+        REPO_IMPL["Repository<br/>Implementations"]
+        MAPPER["Mappers<br/>Row ↔ Entity"]
+        CONTAINER["Service<br/>Container"]
+    end
+
+    PRES --> APP
+    APP --> DOM
+    INFRA --> DOM
+    INFRA -.->|implements| REPO_INT
+
+    style PRES fill:#667EEA,color:#fff
+    style APP fill:#F5576C,color:#fff
+    style DOM fill:#4FACFE,color:#fff
+    style INFRA fill:#43E97B,color:#fff
+```
+
+### The Dependency Rule
+
+**Critical:** Dependencies flow inward only. The Domain layer has ZERO external dependencies.
+
+```mermaid
+flowchart LR
+    subgraph OUTER["Outer Layers"]
+        P["Presentation"]
+        I["Infrastructure"]
+    end
+
+    subgraph INNER["Inner Layers"]
+        A["Application"]
+        D["Domain"]
+    end
+
+    P --> A
+    A --> D
+    I --> D
+
+    P -.->|"❌ NEVER"| D
+    I -.->|"❌ NEVER"| P
+
+    style D fill:#4FACFE,color:#fff
+    style OUTER fill:#f5f5f5
+    style INNER fill:#e8f5e9
+```
+
+---
+
+## Directory Structure
+
+```
+vision2026/
+├── src/
+│   ├── Domain/                 # Pure PHP - NO dependencies
+│   │   ├── Entity/
+│   │   │   ├── Article.php     # Aggregate root
+│   │   │   └── ArticleStatus.php # PHP 8.1 enum
+│   │   ├── ValueObject/
+│   │   │   ├── ArticleId.php   # ULID identifier
+│   │   │   ├── ArticleTitle.php
+│   │   │   ├── ArticleSlug.php
+│   │   │   └── ArticleContent.php
+│   │   ├── Event/
+│   │   │   ├── ArticleCreated.php
+│   │   │   └── ArticlePublished.php
+│   │   ├── Repository/
+│   │   │   └── ArticleRepositoryInterface.php
+│   │   └── Exception/
+│   │       └── ArticleNotFoundException.php
+│   │
+│   ├── Application/
+│   │   ├── Command/
+│   │   │   ├── CreateArticle.php
+│   │   │   └── PublishArticle.php
+│   │   ├── Handler/
+│   │   │   ├── CreateArticleHandler.php
+│   │   │   └── PublishArticleHandler.php
+│   │   └── EventDispatcher/
+│   │       └── EventDispatcherInterface.php
+│   │
+│   └── Infrastructure/
+│       ├── Persistence/
+│       │   ├── XoopsArticleRepository.php
+│       │   └── ArticleMapper.php
+│       ├── Container/
+│       │   └── ServiceContainer.php
+│       └── Demo/
+│           └── DemoDataProvider.php
+│
+├── tests/
+│   └── Unit/
+│       └── Domain/
+│           ├── Entity/
+│           │   └── ArticleTest.php
+│           └── ValueObject/
+│               ├── ArticleIdTest.php
+│               └── ArticleTitleTest.php
+│
+├── admin/
+│   ├── index.php
+│   └── menu.php
+├── templates/
+├── config/
+│   └── demo.php
+├── index.php
+├── article.php
+└── xoops_version.php
+```
+
+---
+
+## Key Patterns
+
+### 1. Entity with Factory Methods
+
+```mermaid
+classDiagram
+    class Article {
+        -ArticleId id
+        -ArticleTitle title
+        -ArticleSlug slug
+        -ArticleContent content
+        -ArticleStatus status
+        -array domainEvents
+        +create(title, content, authorId)$ Article
+        +reconstitute(...)$ Article
+        +publish() void
+        +isPublished() bool
+        +pullDomainEvents() array
+    }
+
+    class ArticleStatus {
+        <<enumeration>>
+        Draft
+        Published
+        Archived
+        +canTransitionTo(status) bool
+    }
+
+    Article --> ArticleStatus
+```
+
+**Key insight:** Use `create()` for new entities (fires events), `reconstitute()` for loading from database (no events).
+
+### 2. Value Object Validation
+
+```mermaid
+flowchart LR
+    INPUT["Raw Input<br/>'My Title'"]
+    VO["Value Object<br/>ArticleTitle"]
+    VALID["✅ Always Valid"]
+    INVALID["❌ Exception"]
+
+    INPUT -->|"fromString()"| CHECK{Valid?}
+    CHECK -->|Yes| VO
+    CHECK -->|No| INVALID
+    VO --> VALID
+
+    style VO fill:#4FACFE,color:#fff
+    style VALID fill:#43E97B,color:#fff
+    style INVALID fill:#F5576C,color:#fff
+```
+
+### 3. Command/Handler Pattern
+
+```mermaid
+sequenceDiagram
+    participant C as Controller
+    participant CMD as CreateArticle
+    participant H as Handler
+    participant R as Repository
+    participant E as EventDispatcher
+
+    C->>CMD: new CreateArticle(title, content, authorId)
+    C->>H: handle(command)
+    H->>H: Article::create(...)
+    H->>R: save(article)
+    H->>E: dispatch(events)
+    H-->>C: Article
+```
+
+### 4. Repository Pattern
+
+```mermaid
+flowchart TB
+    subgraph DOMAIN["Domain Layer"]
+        INTERFACE["ArticleRepositoryInterface<br/>───────────────<br/>find(id): ?Article<br/>findBySlug(slug): ?Article<br/>save(article): void"]
+    end
+
+    subgraph INFRASTRUCTURE["Infrastructure Layer"]
+        XOOPS_REPO["XoopsArticleRepository<br/>───────────────<br/>Uses $xoopsDB<br/>SQL queries"]
+        DEMO_REPO["DemoArticleRepository<br/>───────────────<br/>In-memory data<br/>For testing"]
+    end
+
+    XOOPS_REPO -.->|implements| INTERFACE
+    DEMO_REPO -.->|implements| INTERFACE
+
+    style DOMAIN fill:#4FACFE,color:#fff
+    style INFRASTRUCTURE fill:#43E97B,color:#fff
+```
+
+---
+
+## Working with This Codebase
+
+### Adding a New Entity
+
+1. Create the Entity in `src/Domain/Entity/`
+2. Create Value Objects in `src/Domain/ValueObject/`
+3. Create Domain Events in `src/Domain/Event/`
+4. Create Repository Interface in `src/Domain/Repository/`
+5. Create Repository Implementation in `src/Infrastructure/Persistence/`
+6. Add to ServiceContainer
+7. Write unit tests (Domain layer only needs PHPUnit)
+
+### Adding a New Command
+
+```mermaid
+flowchart LR
+    A["1. Create Command<br/>Application/Command/"] --> B["2. Create Handler<br/>Application/Handler/"]
+    B --> C["3. Register in Container"]
+    C --> D["4. Use in Controller"]
+
+    style A fill:#667EEA,color:#fff
+    style B fill:#667EEA,color:#fff
+    style C fill:#43E97B,color:#fff
+    style D fill:#667EEA,color:#fff
+```
+
+### Testing Strategy
+
+```mermaid
+pie title Test Distribution
+    "Unit Tests (Domain)" : 60
+    "Unit Tests (Application)" : 20
+    "Integration Tests" : 15
+    "Functional Tests" : 5
+```
+
+**Unit tests for Domain layer:**
+- No mocks needed
+- No database
+- No XOOPS
+- Run in milliseconds
+
+---
+
+## Demo Mode
+
+When `config/demo.php` has `'enabled' => true`:
+
+```mermaid
+flowchart TB
+    REQ["Request"] --> CHECK{Demo Mode?}
+    CHECK -->|Yes| DEMO["DemoDataProvider<br/>Returns sample articles"]
+    CHECK -->|No| DB["XoopsArticleRepository<br/>Queries database"]
+    DEMO --> RESPONSE["Response"]
+    DB --> RESPONSE
+
+    style DEMO fill:#43E97B,color:#fff
+    style DB fill:#4FACFE,color:#fff
+```
+
+Demo mode provides 5 sample articles with educational content about Clean Architecture.
+
+---
+
+## Common Tasks
+
+### Run Tests
+```bash
+composer test
+```
+
+### Check Code Style
+```bash
+composer cs-check
+```
+
+### Enable Demo Mode
+```php
+// config/demo.php
+return ['enabled' => true];
+```
+
+### Create a New Article (Code)
+```php
+$command = new CreateArticle(
+    ArticleTitle::fromString('My Title'),
+    ArticleContent::fromString('Content here'),
+    AuthorId::fromInt($userId)
+);
+
+$article = $handler->handle($command);
+```
+
+---
+
+## Integration with XOOPS
+
+### What Stays Traditional
+- `xoops_version.php` — Module manifest
+- `admin/menu.php` — Admin menu
+- `templates/*.tpl` — Smarty templates
+- XOOPS bootstrap (`mainfile.php`, `header.php`)
+
+### What's New
+- PSR-4 autoloading via Composer
+- Dependency injection via ServiceContainer
+- Domain logic isolated from XOOPS
+- Unit tests without XOOPS bootstrap
+
+---
+
+## Resources
+
+- [WALKTHROUGH.md](docs/WALKTHROUGH.md) — Step-by-step request flow
+- [COMPARISON.md](docs/COMPARISON.md) — Traditional vs Vision 2026
+- [README.md](README.md) — Module documentation
+- [Knowledge Base](../XOOPS-Knowledge-Base/10-Vision2026-Module/) — Full documentation
+
+---
+
+*This guide helps AI assistants understand and work with the Vision 2026 codebase effectively.*
