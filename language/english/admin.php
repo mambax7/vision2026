@@ -71,6 +71,12 @@ define('_AM_VISION2026_ERROR_TITLE_TOO_LONG', 'Title must not exceed 200 charact
 define('_AM_VISION2026_ERROR_CONTENT_REQUIRED', 'Content is required.');
 define('_AM_VISION2026_ERROR_SLUG_EXISTS', 'This URL slug is already in use.');
 
+// Dropdowns
+define('_AM_VISION2026_CATEGORY', 'Category');
+define('_AM_VISION2026_SELECT_CATEGORY', 'Select Category');
+define('_AM_VISION2026_ALL_CATEGORIES', 'All Categories');
+define('_AM_VISION2026_ALL_STATUSES', 'All Statuses');
+
 // Table headers
 define('_AM_VISION2026_TH_ID', 'ID');
 define('_AM_VISION2026_TH_TITLE', 'Title');

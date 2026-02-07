@@ -170,11 +170,6 @@ final class Article
     }
 
     /**
-     * Archive the article.
-     *
-     * Transitions from Draft or Published to Archived.
-     */
-    /**
      * Unpublish the article.
      *
      * Transitions from Published to Draft.
@@ -189,6 +184,11 @@ final class Article
         $this->updatedAt = new \DateTimeImmutable();
     }
 
+    /**
+     * Archive the article.
+     *
+     * Transitions from Draft or Published to Archived.
+     */
     public function archive(): void
     {
         $this->guardTransition(ArticleStatus::Archived);

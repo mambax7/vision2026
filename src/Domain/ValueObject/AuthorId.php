@@ -42,6 +42,16 @@ final readonly class AuthorId
         return $this->value === $other->value;
     }
 
+    /**
+     * Get the integer value.
+     *
+     * Used by infrastructure layer for database operations.
+     */
+    public function toInt(): int
+    {
+        return $this->value;
+    }
+
     public function __toString(): string
     {
         return (string) $this->value;

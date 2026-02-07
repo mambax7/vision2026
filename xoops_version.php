@@ -19,7 +19,7 @@ $modversion = [
     'license'        => 'GPL-2.0+',
     'license_url'    => 'https://www.gnu.org/licenses/gpl-2.0.html',
     'official'       => 1,
-    'image'          => 'assets/images/logo.png',
+    'image'          => 'assets/images/logoModule.png',
     'dirname'        => 'vision2026',
 
     // Requirements
@@ -51,6 +51,10 @@ $modversion = [
         [
             'name' => _MI_VISION2026_ARTICLES ?? 'Articles',
             'url'  => 'index.php',
+        ],
+        [
+            'name' => _MI_VISION2026_CATEGORIES ?? 'Categories',
+            'url'  => 'category.php',
         ],
         [
             'name' => _MI_VISION2026_DEMO ?? 'Demo',
